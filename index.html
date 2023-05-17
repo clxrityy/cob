@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cob | Auth</title>
+    <link rel="icon" type="image/x-icon" href="/assets/meta/favicon.ico">
+    <link rel="apple-touch-icon" href="/assets/meta/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/meta/site.webmanifest">
+    <link href="/assets/static/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main">
+        <div class="wrapper">
+            <div class="container">
+                <div class="content">
+                    <div id="info">
+                        Hey
+                    </div>
+                    <a id="login" href="https://discord.com/api/oauth2/authorize?client_id=1108404750602469426&redirect_uri=http%3A%2F%2Flocalhost%3A53134&response_type=code&scope=identify">
+                        Identify yourself
+                    </a>
+                    <script type="text/javascript">
+                        window.onload = () => {
+                            const fragment = new URLSearchParams(window.location.hash.slice(1));
+                            const [accessToken, tokenType] = [fragment.get('access_token'), fragment.get('token_type')];
+                        
+                            if (!accessToken) {
+                                return (document.getElementById('login').style.display = 'block');
+                            }
+                        
+                            fetch('https://discord.com/api/users/@me', {
+                                headers: {
+                                    authorization: `${tokenType} ${accessToken}`,
+                                },
+                            })
+                                .then(result => result.json())
+                                .then(response => {
+                                    const { username, discriminator } = response;
+                                    document.getElementById('info').innerText += ` ${username}#${discriminator}`;
+                                })
+                                .catch(console.error);
+                        };
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
