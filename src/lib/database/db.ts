@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { userSchema } from "./schemas/User";
 import { guildSchema } from "./schemas/Guild";
 import { memberSchema } from "./schemas/Member";
+import { birthdaySchema } from "./schemas/Birthday";
+import { DateResolvable } from "discord.js";
 
 export const connectDb = async () => {
     mongoose.connect(process.env.MONGO_URI || '');
@@ -37,7 +39,7 @@ export async function fetchGuild(key: string) {
     }
 };
 
-export async function fetchMember(userID:string, guildID: string) {
+export async function fetchMember(userID: string, guildID: string) {
     let memberDB = await memberSchema.findOne({ id: userID, guildID: guildID });
 
     if (memberDB) {
@@ -47,15 +49,64 @@ export async function fetchMember(userID:string, guildID: string) {
             id: userID,
             guild: guildID,
             registeredAt: Date.now(),
-            inventory: {
-                tools: {
-                    default: true,
-                }
-            },
         });
 
         await memberDB.save().catch(err => console.log(err));
         return memberDB;
+    }
+};
+
+export async function fetchBirthday(userID: string, guildID: string) {
+    let birthdayUser = await birthdaySchema.findOne({ userId: userID, guildId: guildID });
+
+    if (birthdayUser) {
+        return birthdayUser;
+    } else {
+        birthdayUser = new birthdaySchema({
+            userId: userID,
+            guildId: guildID,
+        });
+
+        await birthdayUser.save().catch(err => console.log(err));
+        return birthdayUser;
+    }
+};
+
+export async function setBirthday(userID: string, guildID: string, birthday: DateResolvable) {
+    let birthdayUser = await birthdaySchema.findOne({ userId: userID, guildId: guildID });
+    let user = await memberSchema.findOne({ id: userID, guild: guildID });
+
+    if (birthdayUser && user) {
+        birthdayUser.birthday = birthday.toString();
+        await birthdayUser.save().catch(err => console.log(err));
+        user.birthday = birthday.toString();
+        await user.save().catch(err => console.log(err));
+        return birthdayUser;
+    } else if (user) {
+        birthdayUser = new birthdaySchema({
+            userId: userID,
+            guildId: guildID,
+            birthday: birthday.toString()
+        });
+
+        await birthdayUser.save().catch(err => console.log(err));
+        return birthdayUser;
+    } else {
+        birthdayUser = new birthdaySchema({
+            userId: userID,
+            guildId: guildID,
+            birthday: birthday.toString()
+        });
+        user = new memberSchema({
+            id: userID,
+            guild: guildID,
+            registeredAt: Date.now(),
+            birthday: birthday.toString()
+        })
+
+        await birthdayUser.save().catch(err => console.log(err));
+        await user.save().catch(err => console.log(err));
+        return birthdayUser;
     }
 };
 
