@@ -1,7 +1,5 @@
 # cob
 
-![image]('/src/assets/img/cob.png')
-
 ---
 
 ## ⚠️ Not yet complete
