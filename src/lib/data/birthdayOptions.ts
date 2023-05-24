@@ -4,7 +4,7 @@ const date = new Date();
 const currentYear = date.getFullYear();
 
 
-export const birthdayOptions = (month: number, day: number, year: number) => {
+export const birthdayOptions = (month: number, day: number, year: number | null) => {
     if (month in monthOptions) {
         if (day > 31 || day < 1) {
             return "Invalid day!" && false;
@@ -15,7 +15,10 @@ export const birthdayOptions = (month: number, day: number, year: number) => {
                 } else {
                     if (year >= currentYear) {
                         return "Invalid year!" && false;
-                    } else {
+                    } else if (year === null) {
+                        return `Birthday set as **${month}**/**${day}**`
+                    }
+                    else {
                         return `Birthday set as: **${month}**/**${day}**/**${year}**!`;
                     }
                 }

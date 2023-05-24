@@ -60,7 +60,7 @@ export async function fetchBirthday(userID: string, guildID: string) {
     let birthdayUser = await birthdaySchema.findOne({ userId: userID, guildId: guildID });
 
     if (birthdayUser) {
-        return birthdayUser;
+        return birthdayUser.birthday;
     } else {
         birthdayUser = new birthdaySchema({
             userId: userID,
@@ -68,7 +68,7 @@ export async function fetchBirthday(userID: string, guildID: string) {
         });
 
         await birthdayUser.save().catch(err => console.log(err));
-        return birthdayUser.birthday as string;
+        return birthdayUser.birthday;
     }
 };
 

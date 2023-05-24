@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 interface IBirthday {
     userId: string;
     guildId: string;
-    birthday: DateResolvable;
+    birthday: string;
 }
 
 export const birthdaySchema = mongoose.model("Birthdays", new mongoose.Schema<IBirthday>({

@@ -21,7 +21,7 @@ A customizable birthday bot.
 - Lists the birthdays in the guild in a sortable embed.
 - ** Future functionality: `/birthday list {month}`
 
-> `/birthday {user}` **NOT COMPLETE**
+> `/birthday {user}`
 
 - Displays the mentioned user's birthday.
 - ** Future functionality:

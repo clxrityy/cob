@@ -39,8 +39,15 @@ export default new Command({
             const birthdayRaw = setRes.split('/') as string[];
             const month = Number(birthdayRaw[0]);
             const day = Number(birthdayRaw[1]);
-            const year = Number(birthdayRaw[2]);
-            const birthday = `${month}/${day}/${year}`;
+            const year = Number(birthdayRaw[2]) || null;
+            let birthday = `${month}/${day}/${year}`;
+
+            if (year != null) {
+                birthday = `${month}/${day}/${year}`;
+            } else {
+                birthday = `${month}/${day}`;
+            }
+
             if (birthdayOptions(month, day, year) != false) {
                 if (await isAlreadyBirthday(userId, guildId) != false) {
                     await interaction.followUp("You have already set your birthday!");
@@ -57,7 +64,7 @@ export default new Command({
         if (interaction.options.get('user') != null) {
             const target = interaction.options.get('user').user.id;
             if (isAlreadyBirthday(target, guildId)) {
-                const birthday = await fetchBirthday(target, guildId);
+                const birthday = await fetchBirthday(target, guildId) as string;
                 await interaction.followUp(`${interaction.options.get("user").user}'s birthday: **${birthday}**`)
             } else {
                 await interaction.followUp(`${interaction.options.get('user').user} has not set their birthday!`)
