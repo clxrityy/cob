@@ -10,6 +10,6 @@ interface IBirthday {
 export const birthdaySchema = mongoose.model("Birthdays", new mongoose.Schema<IBirthday>({
     userId: { type: String },
     guildId: { type: String },
-    birthday: { type: Number },
+    birthday: { type: String },
 }));
 

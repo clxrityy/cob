@@ -2,7 +2,7 @@ import { ApplicationCommandDataResolvable, Client, ClientEvents, Collection } fr
 import { CommandType } from "../typings/Command";
 import glob from "glob";
 import { promisify } from "util";
-import { RegisterCommandsOptions } from "../typings/client";
+import { RegisterCommandsOptions } from "../typings/Client";
 import { Event } from "./Event";
 
 const globPromise = promisify(glob);

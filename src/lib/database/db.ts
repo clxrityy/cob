@@ -110,5 +110,11 @@ export async function setBirthday(userID: string, guildID: string, birthday: Dat
     }
 };
 
-
-
+export async function isAlreadyBirthday(userID: string, guildID: string) {
+    let birthdayUser = await birthdaySchema.findOne({ userID, guildID });
+    if (birthdayUser) {
+        return birthdayUser;
+    } else {
+        return false;
+    }
+}
