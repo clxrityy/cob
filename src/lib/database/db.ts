@@ -68,7 +68,7 @@ export async function fetchBirthday(userID: string, guildID: string) {
         });
 
         await birthdayUser.save().catch(err => console.log(err));
-        return birthdayUser;
+        return birthdayUser.birthday as string;
     }
 };
 
