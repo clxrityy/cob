@@ -1,8 +1,9 @@
-import { ApplicationCommandOptionType, User } from "discord.js";
+import { ApplicationCommandOptionType, ApplicationCommandType, EmbedBuilder } from "discord.js";
 import { birthdayCmdEmbed } from "../../lib/data/birthdayCmds";
 import { fetchBirthday, fetchMember, isAlreadyBirthday, setBirthday } from "../../lib/database/db";
 import { Command } from "../../structures/Command";
 import { birthdayOptions } from "../../lib/data/birthdayOptions";
+import { fetchGuildBirthdays } from "../../lib/data/organizeList";
 
 export default new Command({
     name: 'bd',
@@ -16,9 +17,7 @@ export default new Command({
         {
             name: 'list',
             description: 'List all the guild birthdays!',
-            type: ApplicationCommandOptionType.String,
-            required: false,
-            autocomplete: true,
+            type: ApplicationCommandOptionType.Number,
         },
         {
             name: 'user',
@@ -69,6 +68,16 @@ export default new Command({
             } else {
                 await interaction.followUp(`${interaction.options.get('user').user} has not set their birthday!`)
             }
+        }
+
+        if (interaction.options.get('list') != null) {
+            const list = String(await fetchGuildBirthdays(guildId));
+            const embed = new EmbedBuilder()
+                .setColor(0x0099FF)
+                .setDescription(list)
+                .setTimestamp();
+            await interaction.followUp({ embeds: [embed] });
+            console.log(list)
         }
 
         // default
