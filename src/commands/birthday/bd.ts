@@ -16,8 +16,8 @@ export default new Command({
         },
         {
             name: 'list',
-            description: 'List all the guild birthdays!',
-            type: ApplicationCommandOptionType.Number,
+            description: 'List birthdays from a specific month!',
+            type: ApplicationCommandOptionType.Integer,
         },
         {
             name: 'user',
@@ -58,7 +58,7 @@ export default new Command({
                 await interaction.followUp("You didn't provide your birthday correctly!")
             }
         }
-        
+
         // user
         if (interaction.options.get('user') != null) {
             const target = interaction.options.get('user').user.id;
@@ -71,13 +71,20 @@ export default new Command({
         }
 
         if (interaction.options.get('list') != null) {
-            const list = String(await fetchGuildBirthdays(guildId));
+            const month = interaction.options.get('list').value
+            let list = ''
+            if (month === 0) {
+                list = String(await fetchGuildBirthdays(guildId));
+            } else if (month != 0) {
+                list = "You must specify a month! Use **0** to display all months."
+            } else {
+                list = 'Error'
+            }
             const embed = new EmbedBuilder()
                 .setColor(0x0099FF)
                 .setDescription(list)
                 .setTimestamp();
             await interaction.followUp({ embeds: [embed] });
-            console.log(list)
         }
 
         // default

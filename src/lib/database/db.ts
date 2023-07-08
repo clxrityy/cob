@@ -118,3 +118,13 @@ export async function isAlreadyBirthday(userID: string, guildID: string) {
         return false;
     }
 }
+
+export async function deleteGuild(guildID: string) {
+    let guild = await guildSchema.findOne({ id: guildID });
+
+    if (guild) {
+        await guild.deleteOne(guild._id);
+    } else {
+        return false;
+    }
+}

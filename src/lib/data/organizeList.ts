@@ -5,7 +5,7 @@ export async function fetchGuildBirthdays (guildID: string) {
 
     if (birthdays) {
         return birthdays.map((user) => 
-            user.userId + ' : ' + user.birthday + '\n');
+            user.userId + ' : ' + "**" + user.birthday + "**" + '\n');
     } else {
         return 'No birthdays in this guild!';
     }
